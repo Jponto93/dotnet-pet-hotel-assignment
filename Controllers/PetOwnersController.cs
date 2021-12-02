@@ -24,7 +24,6 @@ namespace pet_hotel.Controllers
         {
             return new List<PetOwner>();
         }
-
         // POST
         [HttpPost]
         public IActionResult Post(PetOwner petOwner)
@@ -48,6 +47,25 @@ namespace pet_hotel.Controllers
             _context.Update(petOwner);
             _context.SaveChanges();
             return NoContent();
+        }
+        // DEL /api/petOwners/:id
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            Console.WriteLine("deleting with id: " + id);
+            PetOwner petOwner = _context.PetOwners.SingleOrDefault(petOwner => petOwner.id == id);
+
+            if (petOwner is null)
+            {
+                // not found
+                return NotFound(); // 404
+            }
+            // delete that pet owner
+            _context.PetOwners.Remove(petOwner);
+            _context.SaveChanges();
+
+            // respond
+            return NoContent(); // 204
         }
     }
 }
