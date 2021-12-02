@@ -24,30 +24,37 @@ namespace pet_hotel.Controllers
         {
             return new List<PetOwner>();
         }
-        // POST
+
+        // POST /api/PetOwners
         [HttpPost]
         public IActionResult Post(PetOwner petOwner)
         {
+            // Confirming that we are in POST.
+            Console.WriteLine("In PetOwner POST");
             _context.Add(petOwner);
             _context.SaveChanges();
+            // Return the location of the newly created pet owner.
             return CreatedAtAction(nameof(Post), new { id = petOwner.id }, petOwner);
         }
 
-        // PUT
+        // PUT /api/PetOwners/:id
         [HttpPut("{id}")]
         public IActionResult Put(int id, PetOwner petOwner)
         {
+            // Confirming that we are in PUT.
             Console.WriteLine("In PetOwner PUT");
 
+            // Does ID exist?
             if (id != petOwner.id)
             {
-                return BadRequest();
+                return BadRequest(); // 404
             }
 
             _context.Update(petOwner);
             _context.SaveChanges();
             return NoContent();
         }
+
         // DEL /api/petOwners/:id
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
