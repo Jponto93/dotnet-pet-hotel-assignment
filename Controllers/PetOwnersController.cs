@@ -12,7 +12,8 @@ namespace pet_hotel.Controllers
     public class PetOwnersController : ControllerBase
     {
         private readonly ApplicationContext _context;
-        public PetOwnersController(ApplicationContext context) {
+        public PetOwnersController(ApplicationContext context)
+        {
             _context = context;
         }
 
@@ -36,6 +37,50 @@ namespace pet_hotel.Controllers
                 return NotFound(); //404
             }
             return petOwner;
+
+        }
+        // POST
+        [HttpPost]
+        public IActionResult Post(PetOwner petOwner)
+        {
+            _context.Add(petOwner);
+            _context.SaveChanges();
+            return CreatedAtAction(nameof(Post), new { id = petOwner.id }, petOwner);
+        }
+
+        // PUT
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, PetOwner petOwner)
+        {
+            Console.WriteLine("In PetOwner PUT");
+
+            if (id != petOwner.id)
+            {
+                return BadRequest();
+            }
+
+            _context.Update(petOwner);
+            _context.SaveChanges();
+            return NoContent();
+        }
+        // DEL /api/petOwners/:id
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            Console.WriteLine("deleting with id: " + id);
+            PetOwner petOwner = _context.PetOwners.SingleOrDefault(petOwner => petOwner.id == id);
+
+            if (petOwner is null)
+            {
+                // not found
+                return NotFound(); // 404
+            }
+            // delete that pet owner
+            _context.PetOwners.Remove(petOwner);
+            _context.SaveChanges();
+
+            // respond
+            return NoContent(); // 204
         }
     }
 }
