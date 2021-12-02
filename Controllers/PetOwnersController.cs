@@ -25,6 +25,16 @@ namespace pet_hotel.Controllers
             return new List<PetOwner>();
         }
 
+        // POST
+        [HttpPost]
+        public IActionResult Post(PetOwner petOwner)
+        {
+            _context.Add(petOwner);
+            _context.SaveChanges();
+            return CreatedAtAction(nameof(Post), new { id = petOwner.id }, petOwner);
+        }
+
+        // PUT
         [HttpPut("{id}")]
         public IActionResult Put(int id, PetOwner petOwner)
         {
