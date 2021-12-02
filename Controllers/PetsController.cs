@@ -52,6 +52,7 @@ namespace pet_hotel.Controllers
         //     return new List<Pet>{ newPet1, newPet2};
         // }
 
+        // POST 
         [HttpPost]
         public IActionResult Post(Pet pet)
         {
@@ -59,5 +60,23 @@ namespace pet_hotel.Controllers
             _context.SaveChanges();
             return CreatedAtAction(nameof(Post), new { id = pet.id }, pet);
         }
+
+        // PUT /api/pets/:id
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, Pet pet)
+        {
+            // Confirming we are in Pets PUT
+            Console.WriteLine("In Pets Put");
+
+            if (id != pet.id)
+            {
+                return BadRequest(); // 404
+            }
+
+            _context.Update(pet);
+            _context.SaveChanges();
+            return NoContent();
+        }
+
     }
 }
