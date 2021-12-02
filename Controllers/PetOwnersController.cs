@@ -25,6 +25,7 @@ namespace pet_hotel.Controllers
             return new List<PetOwner>();
         }
 
+        // POST
         [HttpPost]
         public IActionResult Post(PetOwner petOwner)
         {
@@ -33,5 +34,20 @@ namespace pet_hotel.Controllers
             return CreatedAtAction(nameof(Post), new { id = petOwner.id }, petOwner);
         }
 
+        // PUT
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, PetOwner petOwner)
+        {
+            Console.WriteLine("In PetOwner PUT");
+
+            if (id != petOwner.id)
+            {
+                return BadRequest();
+            }
+
+            _context.Update(petOwner);
+            _context.SaveChanges();
+            return NoContent();
+        }
     }
 }
