@@ -59,5 +59,25 @@ namespace pet_hotel.Controllers
             _context.SaveChanges();
             return CreatedAtAction(nameof(Post), new { id = pet.id }, pet);
         }
+        // DEL /api/pets/:id
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            Console.WriteLine("deleting with id: " + id);
+            Pet pet = _context.Pets.SingleOrDefault(pet => pet.id == id);
+
+            if(pet is null)
+            {
+                // not found
+                return NotFound(); // 404
+            }
+            // delete that pet
+            _context.Pets.Remove(pet);
+            _context.SaveChanges();
+
+            // respond
+            return NoContent(); // 204
+
+        }
     }
 }
