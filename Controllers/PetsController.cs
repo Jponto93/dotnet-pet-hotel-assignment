@@ -25,7 +25,9 @@ namespace pet_hotel.Controllers
         [HttpGet]
         public IEnumerable<Pet> GetPets()
         {
+
             return _context.Pets;
+
 
         }
 
@@ -52,5 +54,51 @@ namespace pet_hotel.Controllers
 
         //     return new List<Pet>{ newPet1, newPet2};
         // }
+
+        // POST 
+        [HttpPost]
+        public IActionResult Post(Pet pet)
+        {
+            _context.Add(pet);
+            _context.SaveChanges();
+            return CreatedAtAction(nameof(Post), new { id = pet.id }, pet);
+        }
+
+        // DEL /api/pets/:id
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            Console.WriteLine("deleting with id: " + id);
+            Pet pet = _context.Pets.SingleOrDefault(pet => pet.id == id);
+
+            if(pet is null)
+            {
+                // not found
+                return NotFound(); // 404
+            }
+            // delete that pet
+            _context.Pets.Remove(pet);
+            _context.SaveChanges();
+
+            // respond
+            return NoContent(); // 204
+
+        }
+        // PUT /api/pets/:id
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, Pet pet)
+        {
+            // Confirming we are in Pets PUT
+            Console.WriteLine("In Pets Put");
+
+            if (id != pet.id)
+            {
+                return BadRequest(); // 404
+            }
+
+            _context.Update(pet);
+            _context.SaveChanges();
+            return NoContent();
+        }
     }
 }
