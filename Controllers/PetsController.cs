@@ -56,6 +56,8 @@ namespace pet_hotel.Controllers
         [HttpPost]
         public IActionResult Post(Pet pet)
         {
+            pet.checkedInAt = null;
+            
             _context.Add(pet);
             _context.SaveChanges();
             return CreatedAtAction(nameof(Post), new { id = pet.id }, pet);
@@ -97,5 +99,42 @@ namespace pet_hotel.Controllers
             _context.SaveChanges();
             return NoContent();
         }
+        // PUT id check in /api/pets/id/checkout
+        [HttpPut("{id}/checkout")]
+        public IActionResult CheckoutPut(int id, Pet pet)
+        {
+            // Confirming we are in Pets PUT
+            Console.WriteLine("In Pets PUT");
+
+            if(id != pet.id)
+            {
+                return BadRequest(); // 404
+            }
+
+            pet.checkedInAt = null;
+
+            _context.Update(pet);
+            _context.SaveChanges();
+            return NoContent();
+        }
+        // PUT id check in /api/pets/id/checkin
+        [HttpPut("{id}/checkin")]
+        public IActionResult CheckinPut(int id, Pet pet)
+        {
+            // Confirming we are in Pets PUT
+            Console.WriteLine("In Pets PUT");
+
+            if(id != pet.id)
+            {
+                return BadRequest(); // 404
+            }
+
+            pet.checkedInAt = DateTime.Now;
+
+            _context.Update(pet);
+            _context.SaveChanges();
+            return NoContent();
+        }
+        
     }
 }
