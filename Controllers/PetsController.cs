@@ -26,15 +26,34 @@ namespace pet_hotel.Controllers
         public IEnumerable<Pet> GetPets()
         {
 
-            return _context.Pets;
+            return _context.Pets
+            .Include(pet => pet.petOwner);
         }
 
- //GET ID 
+        //GET ID 
+        // [HttpGet("{id}")]
+        // public ActionResult<Pet> GetById(int id)
+        // {
+            
+        //     return _context.Pets
+            // .Include(pet => pet.petOwnerId)
+            // .SingleOrDefault(pet => pet.id == id);
+        // }
+
+        //GET ID 
         [HttpGet("{id}")]
-        public Pet GetById(int id)
+        public ActionResult<Pet> GetById(int id)
         {
+            Console.WriteLine("get by id: " + id);
+
+            Pet pet = _context.Pets.SingleOrDefault( pet => pet.id == id );
+
+            if(pet == null){
+                return NotFound(); //404
+            }
+
             return _context.Pets
-            .Include(pet => pet.petOwnerId)
+            .Include(pet => pet.petOwner)
             .SingleOrDefault(pet => pet.id == id);
         }
         // public ActionResult<Pet> GetById(int id)
@@ -51,7 +70,7 @@ namespace pet_hotel.Controllers
         // }
 
 
-        
+
         // [HttpGet]
         // [Route("test")]
         // public IEnumerable<Pet> GetPets() {
@@ -81,7 +100,7 @@ namespace pet_hotel.Controllers
         public IActionResult Post(Pet pet)
         {
             pet.checkedInAt = null;
-            
+
             _context.Add(pet);
             _context.SaveChanges();
             return CreatedAtAction(nameof(Post), new { id = pet.id }, pet);
@@ -94,7 +113,7 @@ namespace pet_hotel.Controllers
             Console.WriteLine("deleting with id: " + id);
             Pet pet = _context.Pets.SingleOrDefault(pet => pet.id == id);
 
-            if(pet is null)
+            if (pet is null)
             {
                 // not found
                 return NotFound(); // 404
@@ -130,7 +149,7 @@ namespace pet_hotel.Controllers
             // Confirming we are in Pets PUT
             Console.WriteLine("In Pets PUT");
 
-            if(id != pet.id)
+            if (id != pet.id)
             {
                 return BadRequest(); // 404
             }
@@ -148,7 +167,7 @@ namespace pet_hotel.Controllers
             // Confirming we are in Pets PUT
             Console.WriteLine("In Pets PUT");
 
-            if(id != pet.id)
+            if (id != pet.id)
             {
                 return BadRequest(); // 404
             }
@@ -159,6 +178,6 @@ namespace pet_hotel.Controllers
             _context.SaveChanges();
             return NoContent();
         }
-        
+
     }
 }
