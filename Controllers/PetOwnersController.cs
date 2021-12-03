@@ -23,6 +23,7 @@ namespace pet_hotel.Controllers
         public IEnumerable<PetOwner> GetPets() {
             // return new List<PetOwner>();
             return _context.PetOwners;
+            //.Include(petOwner => petOwner.PetList);
         }
 
         //GET ID 
