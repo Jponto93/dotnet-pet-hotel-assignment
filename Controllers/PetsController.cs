@@ -25,9 +25,33 @@ namespace pet_hotel.Controllers
         [HttpGet]
         public IEnumerable<Pet> GetPets()
         {
-            return new List<Pet>();
+
+            return _context.Pets;
         }
 
+ //GET ID 
+        [HttpGet("{id}")]
+        public Pet GetById(int id)
+        {
+            return _context.Pets
+            .Include(pet => pet.petOwnerId)
+            .SingleOrDefault(pet => pet.id == id);
+        }
+        // public ActionResult<Pet> GetById(int id)
+        // {
+        //     Console.WriteLine("get by id: " + id);
+
+        //     Pet pet = _context.Pet.SingleOrDefault( pet => pet.id == id );
+
+        //     if(pet == null){
+        //         return NotFound(); //404
+        //     }
+        //     return pet;
+
+        // }
+
+
+        
         // [HttpGet]
         // [Route("test")]
         // public IEnumerable<Pet> GetPets() {
